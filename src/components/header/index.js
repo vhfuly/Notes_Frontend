@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React from 'react';
 import { Navbar, Container, Column } from 'rbx';
 import LogoImage from '../../assets/images/logo.png';
 import "../../styles/header.scss";

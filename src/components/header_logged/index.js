@@ -1,5 +1,5 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { Navbar, Container, Column, Button, Dropdown } from 'rbx';
+import React, { useState, useEffect } from 'react';
+import { Navbar, Column, Button, Dropdown } from 'rbx';
 import LogoImage from '../../assets/images/logo-white.png';
 import "../../styles/header.scss";
 import UsersService from '../../services/users';
@@ -9,7 +9,21 @@ import { faList } from '@fortawesome/free-solid-svg-icons'
 
 function HeaderLogged(props) {
   const [redirectToHome, setRedirectToHome] = useState(false);
+
+  const [user, setUser] = useState('');
   
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  async function fetchUser() {
+    const jasonUser =window.localStorage.getItem('user')
+    const user =JSON.parse(jasonUser);
+    setUser(user.name)
+      
+    console.log(user.name)
+  }
+
   const logOut = async () => {
     await UsersService.logout();
     setRedirectToHome(true);
@@ -43,7 +57,7 @@ function HeaderLogged(props) {
       <Navbar.Segment as="div" className="navbar-item navbar-start" align="start">
         <Navbar.Item as="div">
           <Button 
-            className="open-button" 
+            className={props.hidden}
             color="white" 
             outlined
             onClick={() => props.setIsOpen(true)}>
@@ -56,13 +70,13 @@ function HeaderLogged(props) {
             <Dropdown>
               <Dropdown.Trigger>
                 <Button className="button" color="white" outlined>
-                  <span>{props.user} ▼</span>
+                  <span>{user} ▼</span>
                 </Button>
               </Dropdown.Trigger>
               <Dropdown.Menu>
                 <Dropdown.Content>
                   <Dropdown.Item as="div">
-                    <Link to="/users/edit">User Edit</Link>
+                    <Link to={props.link}>{props.path}</Link>
                   </Dropdown.Item>
                   <Dropdown.Divider />
                   <Dropdown.Item as="div">
